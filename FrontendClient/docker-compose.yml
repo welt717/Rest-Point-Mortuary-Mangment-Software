@@ -1,0 +1,6 @@
+services:
+FrontendClinet:
+build   : ./dist
+conatiner_name:   dist
+restart: always
+env_file: 
