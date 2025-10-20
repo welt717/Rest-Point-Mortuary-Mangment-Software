@@ -4,6 +4,7 @@ const { safeQuery } = require('../../configurations/sqlConfig/db');
 const { getKenyaTimeISO } = require('../../utilities/timeStamps/timeStamps');
 const fs = require('fs');
 const path = require('path');
+const apicache = require('apicache');
 
 // ----------------- Setup -----------------
 const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });

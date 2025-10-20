@@ -164,7 +164,7 @@ app.get('/health', async (req, res) => {
 
 app.get('/api/v1/restpoint/notifications', async (req, res) => {
   try {
-    const notifications = await safeQuery(`SELECT * FROM notifications ORDER BY created_at DESC`);git branch -M main
+    const notifications = await safeQuery(`SELECT * FROM notifications ORDER BY created_at DESC`);
     res.status(200).json({ success: true, count: notifications.length, data: notifications });
   } catch (err) {
     logMainServerError(err, 'Fetching notifications failed');
@@ -213,6 +213,9 @@ app.use(routeBase, require('./routes/checkOut'));
 app.use(routeBase, require('./routes/coldRoom'));
 app.use(routeBase, require('./routes/tagRoutes'));
 app.use(routeBase, require('./routes/invoice'));
+app.use(routeBase, require('./routes/hearseroutes'));
+app.use(routeBase, require('./routes/bookhearse'));
+
 
 // ----------------- 404 -----------------
 app.use((req, res) => res.status(404).json({ message: '❌ Route not found' }));

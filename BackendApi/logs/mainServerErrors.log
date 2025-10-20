@@ -36266,3 +36266,91 @@ Error: read ECONNRESET
     at listOnTimeout (node:internal/timers:588:17)
     at processTimers (node:internal/timers:523:7)
 
+[2025-10-17T09:24:11.377Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T09:25:35.164Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T09:26:48.938Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T09:28:17.363Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T09:31:39.318Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T09:33:02.973Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T09:34:25.098Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T09:40:17.979Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T10:35:33.931Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T10:37:14.073Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+[2025-10-17T10:37:39.372Z] UNCAUGHT EXCEPTION - Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+Stack:
+Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at node:net:2206:7
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+

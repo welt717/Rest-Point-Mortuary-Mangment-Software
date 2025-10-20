@@ -52,6 +52,7 @@ import FooterComponent from './assets/components/globalFooter.jsx';
 import LoginPage from './assets/components/user/login.jsx';
 import   DocumentsPage   from  './assets/components/user/modals/documentspage.jsx'
 import   SignOutPage    from   './assets/components/user/modals/sigoutpage.jsx'
+import   BookingSystem    from './assets/components/hearsebookings/bookingstatus.jsx'
 
 // --- Modern Color Palette ---
 const Colors = {
@@ -1445,6 +1446,8 @@ function App() {
               <Route path="/login" element={<LoginPage onLoginSuccess={() => setIsAuthenticated(true)} />} />
               <Route path="/qr-code/:id" element={<QRCodeViewer />} />
               <Route path="/analytics" element={<Analytics />} />
+                 <Route path="/booking-status" element={<BookingSystem />} />
+              
               <Route path="/register-deceased" element={<RegisterDeceased />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/deceased-details/:id" element={<DeceasedDetailsPage />} />

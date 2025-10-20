@@ -8,12 +8,11 @@ const { getKenyaTimeISO } = require('../../utilities/timeStamps/timeStamps');
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretjwtkey";
 const RESET_TOKEN = "400453@welttallis";
 
-// 🔒 In-memory login attempt tracking
-const failedLogins = {}; // { ip: { count, lastAttempt } }
+const failedLogins = {};
 const MAX_FAILED = 10;
-const BLOCK_TIME = 15 * 60 * 1000; // 15 minutes
+const BLOCK_TIME = 15 * 60 * 1000;
 
-// 🔧 Safe DB wrapper
+// 🔧 DB helper
 async function safeExecute(sql, params = []) {
   try {
     const [result] = await pool.execute(sql, params);
@@ -32,17 +31,17 @@ function isIpBlocked(ip) {
   if (record.count >= MAX_FAILED) {
     const elapsed = Date.now() - record.lastAttempt;
     if (elapsed < BLOCK_TIME) return true;
-    delete failedLogins[ip]; // reset after block expires
+    delete failedLogins[ip];
   }
   return false;
 }
 
 // ✅ Register User
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, username, email, role, password } = req.body;
+  const { name, username, email, role, password, branch_id } = req.body;
 
-  if (!name || !username || !role || !password) {
-    return res.status(400).json({ success: false, message: "All fields are required." });
+  if (!name || !username || !role || !password || !branch_id) {
+    return res.status(400).json({ success: false, message: "All fields including branch_id are required." });
   }
 
   if (!validator.isAlphanumeric(username)) {
@@ -58,6 +57,11 @@ const registerUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ success: false, message: 'Invalid role provided.' });
   }
 
+  const [branchExists] = await safeExecute("SELECT * FROM branches WHERE id = ?", [branch_id]);
+  if (!branchExists) {
+    return res.status(400).json({ success: false, message: "Invalid branch_id." });
+  }
+
   const existing = await safeExecute(
     "SELECT 1 FROM users WHERE username = ? OR email = ?",
     [username, email]
@@ -71,32 +75,34 @@ const registerUser = asyncHandler(async (req, res) => {
   const createdAt = getKenyaTimeISO();
 
   const result = await safeExecute(
-    `INSERT INTO users (name, username, email, role, password_hash, created_at, updated_at) 
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [name, username, email || null, role, hashedPassword, createdAt, createdAt]
+    `INSERT INTO users (name, username, email, role, password_hash, branch_id, created_at, updated_at) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [name, username, email || null, role, hashedPassword, branch_id, createdAt, createdAt]
   );
 
   res.status(201).json({
     success: true,
     message: "User registered successfully.",
-    data: { id: result.insertId, name, username, email, role }
+    data: {
+      id: result.insertId,
+      name,
+      username,
+      email,
+      role,
+      branch_id,
+      branch_name: branchExists.name
+    }
   });
 });
 
 // ✅ Login User
-
-
 const loginUser = asyncHandler(async (req, res) => {
-  console.log({ message: "🔑 Login endpoint hit" });
-
   const ip = req.ip || req.connection.remoteAddress;
-
   if (isIpBlocked(ip)) {
     return res.status(429).json({ success: false, message: "Too many failed attempts. Try again later." });
   }
 
   const { identifier, password } = req.body;
-
   if (!identifier || !password) {
     return res.status(400).json({ success: false, message: "Username/email and password required." });
   }
@@ -125,7 +131,6 @@ const loginUser = asyncHandler(async (req, res) => {
     return res.status(401).json({ success: false, message: "Invalid credentials." });
   }
 
-  // Reset failed login count
   if (failedLogins[ip]) delete failedLogins[ip];
 
   const now = getKenyaTimeISO();
@@ -134,22 +139,19 @@ const loginUser = asyncHandler(async (req, res) => {
     [user[0].id, now]
   );
 
-  // Generate JWT Token
   const token = jwt.sign(
-    { id: user[0].id, role: user[0].role },
+    { id: user[0].id, role: user[0].role, branch_id: user[0].branch_id },
     JWT_SECRET,
     { expiresIn: "8h" }
   );
 
-  // 🧁 Set token cookie
   res.cookie("auth_token", token, {
-    httpOnly: true, // prevents JS access
-    secure: process.env.NODE_ENV === "production", // only HTTPS in production
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 8 * 60 * 60 * 1000 // 8 hours
+    maxAge: 8 * 60 * 60 * 1000
   });
 
-  // ✅ Response
   res.status(200).json({
     success: true,
     message: "Login successful.",
@@ -158,6 +160,7 @@ const loginUser = asyncHandler(async (req, res) => {
       id: user[0].id,
       username: user[0].username,
       role: user[0].role,
+      branch_id: user[0].branch_id,
       checkin_time: now
     }
   });
@@ -181,7 +184,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     [userId, now]
   );
 
-  // 🧁 Clear token cookie
   res.clearCookie("auth_token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -221,13 +223,18 @@ const resetPassword = asyncHandler(async (req, res) => {
   res.json({ success: true, message: "Password reset successful." });
 });
 
-// ✅ Fetch all users
+// ✅ Fetch all users (Admin)
 const getAllUsers = asyncHandler(async (req, res) => {
   const users = await safeExecute(
-    "SELECT id, name, username, email, role, created_at, updated_at FROM users ORDER BY created_at DESC"
+    `SELECT u.id, u.name, u.username, u.email, u.role, u.branch_id, b.name AS branch_name, u.created_at, u.updated_at 
+     FROM users u 
+     LEFT JOIN branches b ON u.branch_id = b.id 
+     ORDER BY u.created_at DESC`
   );
   res.json({ success: true, count: users.length, users });
 });
+
+
 
 // ✅ Fetch attendance logs
 const getAttendanceLogs = asyncHandler(async (req, res) => {
