@@ -1,5 +1,4 @@
-version: "3.9"  # Specify Compose file version
-
+# docker-compose.yml
 services:
   maria:
     image: mariadb:latest
@@ -17,24 +16,22 @@ services:
 
   backend:
     build:
-      context: ./server
+      context: .   # changed from ./server
       dockerfile: Dockerfile
     container_name: backend_container
     restart: unless-stopped
     env_file:
-      - ./server/.env
+      - .env       # changed from ./server/.env
     ports:
-      - "8000:8000"
+      - "5000:5000"
     depends_on:
       - maria
     networks:
       - restbackend
 
-# Volumes for persistent storage
 volumes:
   mariadb_data:
 
-# Custom networks
 networks:
   restbackend:
     driver: bridge
